@@ -94,4 +94,18 @@ router.post('/literature_content', function (req, res, next) {
 
     })
 })
+router.post('/term_content', function (req, res, next) {
+    options = {
+        url:req.body.url,
+        form:{},
+        // headers: {'Authorization': 'Bearer ' + token}
+        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    }
+    request.get(options, function (error, response, body) {
+        var literature = JSON.parse(body)
+        // console.log("home.js literature:",literature)
+        res.send({msg:'ok',data:literature})
+
+    })
+})
 module.exports = router

@@ -7,13 +7,11 @@
   <el-row>
     <h2 style="text-align: center;">汉典荣誉出品中成药</h2>
   </el-row>
-  <el-row :gutter="20">
-    <el-col :span="20">
+  <el-row :gutter="1">
+    <el-col :span="15">
         <div id="main" style="width:100%; height:400px;"></div>
     </el-col>
-
-  </el-row>
-  <el-col :span="12">
+    <el-col :span="8">
       相关文献
       <ul v-for="item in literature" :key="item.name">
         <!-- <li><el-link href="/literature" :underline="false">{{item.name}}</el-link></li> -->
@@ -21,6 +19,8 @@
         <!-- <li><el-link :href="item.url" :underline="false">{{item.name}}</el-link></li> -->
       </ul>
     </el-col>
+  </el-row>
+
 
 
 </el-row>

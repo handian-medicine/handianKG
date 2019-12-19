@@ -26,4 +26,5 @@ export const apiProductGraph = params => { return axios.post(`${baseUrl}/home/pr
 export const apiProductLiterature = params => { return axios.post(`${baseUrl}/home/product_literature`, params).then(res => res.data) }
 //文献详细页面
 export const apiLiteratureContent = params => { return axios.post(`${baseUrl}/home/literature_content`, params).then(res => res.data) }
-
+//术语页面
+export const apiTermContent = params => { return axios.post(`${baseUrl}/home/term_content`, params).then(res => res.data) }

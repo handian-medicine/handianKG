@@ -37,7 +37,7 @@
 
 <script>
 import {apiHome} from '@/api/api-common'
-import Header from '@/components/common/Header'
+import {apiTermContent} from '@/api/api-common';
 
 export default {
     name:"Term",
@@ -66,7 +66,6 @@ export default {
         }
     },
     created () {
-        this.userinfo = JSON.parse((sessionStorage.getItem("userinfo")))
     }
 }
 </script>
