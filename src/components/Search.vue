@@ -8,17 +8,26 @@
   <el-row justify="center">
     <el-form ref="form" :model="form" label-width="180px">
       <el-form-item label="汉典药品文献检索" >
-        <el-input v-model="wenxian"></el-input>
+        <el-input v-model="wenxian">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
       </el-form-item>
       <el-form-item label="医学名词检索" >
-        <el-input v-model="mingci"></el-input>
+        <el-input v-model="mingci">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
       </el-form-item>
       <el-form-item label="中医方剂检索" >
-        <el-input v-model="fangji"></el-input>
+        <el-input v-model="fangji">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
       </el-form-item>
       <el-form-item label="中药材检索" >
-        <el-input v-model="yaocai"></el-input>
+        <el-input v-model="yaocai">
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
       </el-form-item>
+      <!-- <el-button type="primary" icon="el-icon-search" size="small" @click="searchPatient">查询</el-button> -->
     </el-form>
   </el-row>
 </el-row>
@@ -27,15 +36,20 @@
 
 <script>
 import Header from '@/components/common/Header'
+import {apiEnterSearch} from '@/api/api-common'
 
 export default {
     name:"Search",
     components:{Header},
     data () {
         return {
-            userinfo:{},
+            form:{},
             wenxian: "",
             collapsed: true,
+            wenxian:'',
+            mingci:'',
+            fangji:'',
+            yaocai:''
         }
     },
     methods: {
@@ -55,7 +69,17 @@ export default {
         }
     },
     created () {
-        this.userinfo = JSON.parse((sessionStorage.getItem("userinfo")))
+      apiEnterSearch().then(res => {
+          if (res.msg == 'ok') {
+              // this.literature = res.data
+              console.log('hello')
+          } else {
+              // alert('请先登录')
+              this.$router.push("/login")
+          }
+      }
+
+      )
     }
 }
 </script>

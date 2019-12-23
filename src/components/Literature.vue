@@ -12,7 +12,11 @@
       <h3>{{literature_content.title}}</h3>
       <p>摘要：{{literature_content.summary}}</p>
       <p>作者：{{literature_content.author}}</p>
-      <p><img src="@/assets/bg1.jpg" class="image" style="width:100%; height:400px;"></p>
+      <!-- <iframe class="pdf-viewer" src="/static/test.pdf" style="width:100%; height:400px;"> -->
+      <iframe class="pdf-viewer" :src="literature_content.download_url" style="width:100%; height:400px;">
+        <!-- 放到src文件夹下有问题 -->
+        <!-- <pdf src="/static/test.pdf"></pdf> -->
+      </iframe>
     </el-col>
     <el-col :span="8">
       <h3>相关文献</h3>
@@ -30,19 +34,17 @@
 </template>
 
 <script>
+import pdf from 'vue-pdf'
 import Header from '@/components/common/Header'
 import {apiLiteratureContent} from '@/api/api-common';
-
 export default {
 name:"Literature",
-    components:{Header},
+    components:{pdf,Header},
     data () {
         return {
             userinfo:{},
             wenxian: "",
             collapsed: true,
-            // literature_url:'',
-            // literature_name:'',
             literature_content:''
         }
     },

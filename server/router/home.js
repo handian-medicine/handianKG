@@ -39,10 +39,11 @@ router.post('/product_list', function (req, res, next) {
         url:myConst.apiurl + "/product/",
         form:{
         },
+        // 产品列表展示不需要token
         // headers: {'Authorization': 'Bearer ' + token}
-        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+        // headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
     }
-    console.log(req.cookies.usertoken.access_token)
+    // console.log(req.cookies.usertoken.access_token)
     request.get(options, function (error, response, body) {
         var product_list = JSON.parse(body)
         console.log("home.js product_list:",product_list.results)
@@ -66,19 +67,25 @@ router.post('/product_graph', function (req, res, next) {
     })
 })
 router.post('/product_literature', function (req, res, next) {
-    options = {
-        url:myConst.apiurl + "/product/" + req.body.id + "/literatures/",
-        form:{},
-        // headers: {'Authorization': 'Bearer ' + token}
-        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    if (req.cookies.usertoken != undefined) {
+        // console.log("req.cookies.usertoken.access_token::",req.cookies.usertoken.access_token)
+        options = {
+            url:myConst.apiurl + "/product/" + req.body.id + "/literatures/",
+            form:{},
+            // headers: {'Authorization': 'Bearer ' + token}
+            headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+        }
+        request.get(options, function (error, response, body) {
+            var literature = JSON.parse(body)
+            const NUM = 10
+            // console.log("home.js literature:",literature)
+            res.send({msg:'ok',data:literature.slice(0,NUM)})
+        })
+    } else {
+        console.log("没有登录");
+        res.send({msg:'请先登录'})
     }
-    request.get(options, function (error, response, body) {
-        var literature = JSON.parse(body)
-        const NUM = 10
-        // console.log("home.js literature:",literature)
-        res.send({msg:'ok',data:literature.slice(0,NUM)})
 
-    })
 })
 router.post('/literature_content', function (req, res, next) {
     options = {
@@ -107,5 +114,12 @@ router.post('/term_content', function (req, res, next) {
         res.send({msg:'ok',data:literature})
 
     })
+})
+router.post('/enter_search', function (req, res, next) {
+    if (req.cookies.usertoken != undefined) {
+        res.send({msg:'ok'})
+    } else {
+        res.send({msg:'请先登录'})
+    }
 })
 module.exports = router

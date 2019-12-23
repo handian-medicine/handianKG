@@ -64,12 +64,23 @@ export default {
               var data = []
               var links = []
               data = res.data.data
+              data[0].category = 0
+              var categories = [
+                          {
+                            name: '小柴胡汤',
+                            // icon: 'rect' //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+                          },
+                          {
+                            name: 'type2',
+                          }
+              ],
               links = res.data.links
               // 类似python里的map函数
               var links = links.map(o=>{
                   return {source:String(o.start),target:String(o.end),rel:String(o.rel)}
                 });
-              console.log("看这里",links)
+              console.log("看这里links",links)
+              console.log("看这里data",data)
               this.chartGraph = echarts.init(document.getElementById('main'))
               this.chartGraph.setOption(
                 {
@@ -96,9 +107,12 @@ export default {
                           saveAsImage: {show: true}
                       }
                   },
-                  legend:[
-                    {selectedMode: 'single',}
-                  ],
+                  legend: [{
+                        // selectedMode: 'single',
+                        data: categories.map(function (a) {
+                            return a.name;
+                        })
+                  }],
                   series:[
                     {
                       type: 'graph', // 类型:关系图
@@ -127,6 +141,7 @@ export default {
                               formatter: function (x) {return x.data.rel;}
                           }
                       },
+                      categories:categories,
                       label: { //node标签样式
                           normal: {
                               show: true,
@@ -172,8 +187,13 @@ export default {
           // for (var i = 0;i < res.data.length;i++){
           //     this.literature[i] = res.data[i].name
           // }
-          this.literature = res.data
-          console.log('hello',this.literature)
+          if (res.msg == 'ok') {
+              this.literature = res.data
+              console.log('hello',this.literature)
+          } else {
+              // alert('请先登录')
+              this.$router.push("/login")
+          }
       }).catch()
     }
 }

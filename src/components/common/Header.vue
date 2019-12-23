@@ -2,7 +2,11 @@
   <el-header style="height: 40px; background-color: #41B6E6;">
     <el-row>
       <el-col :span="20">
-        <span style="color:white;font-size:17px; line-height: 40px;">汉典中医知识系统</span>
+          <el-link :href='"/search"' :underline="false">
+            <span style="color:white;font-size:17px; line-height: 40px;">
+              汉典中医知识系统
+            </span>
+          </el-link>
       </el-col>
       <el-col :span="2">
         <div>

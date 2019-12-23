@@ -28,3 +28,6 @@ export const apiProductLiterature = params => { return axios.post(`${baseUrl}/ho
 export const apiLiteratureContent = params => { return axios.post(`${baseUrl}/home/literature_content`, params).then(res => res.data) }
 //术语页面
 export const apiTermContent = params => { return axios.post(`${baseUrl}/home/term_content`, params).then(res => res.data) }
+
+//搜索页面
+export const apiEnterSearch = params => { return axios.post(`${baseUrl}/home/enter_search`, params).then(res => res.data) }

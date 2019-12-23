@@ -14,7 +14,7 @@ export default new Router({
     {
       path: '/',
       name: '',
-      redirect:'/login',
+      redirect:'/home',
       hidden: true //用户自定义属性,主要用来控制本条路由是否显示在菜单中
     },
     {

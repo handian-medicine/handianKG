@@ -62,7 +62,7 @@ export default {
             //   this.product_list[i] = res.data[i].name
             // }
             this.product_list = res.data
-            console.log('hello',this.product_list)
+            console.log('产品列表',this.product_list)
             }).catch()
     }
 }

@@ -33,6 +33,7 @@ router.post('/',function (req, res, next) {
     // 4. 必要信息存入cookie   把body里的token信息存入cookie,后续再向服务器发送请求就不必每次把token写到请求里了
           // tip maxAge表示cookie有4小时有效时间
           res.cookie("usertoken", usertoken, {maxAge: 1000 * 60 * 60 * 8, httpOnly: true})
+          // res.cookie("usertoken", usertoken, {maxAge: 1000, httpOnly: true})
           res.cookie("user", {"email": req.body.email,"password": req.body.password}, {maxAge: 1000 * 60 * 60 * 8, httpOnly: true})
           // tip 所有的cookie信息可以在Set-Cookie查看
           // console.log(res.get('Set-Cookie字段信息:', 'Set-Cookie'))
