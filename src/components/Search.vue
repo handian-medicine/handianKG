@@ -8,23 +8,23 @@
   <el-row justify="center">
     <el-form ref="form" :model="form" label-width="180px">
       <el-form-item label="汉典药品文献检索" >
-        <el-input v-model="wenxian">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="literature">
+          <el-button slot="append" icon="el-icon-search" @click="search('literature',literature)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="医学名词检索" >
-        <el-input v-model="mingci">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="term">
+          <el-button slot="append" icon="el-icon-search" @click="search('term',term)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="中医方剂检索" >
-        <el-input v-model="fangji">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="prescription">
+          <el-button slot="append" icon="el-icon-search" @click="search('prescription',prescription)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="中药材检索" >
-        <el-input v-model="yaocai">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input v-model="tcm">
+          <el-button slot="append" icon="el-icon-search" @click="search('tcm',tcm)"></el-button>
         </el-input>
       </el-form-item>
       <!-- <el-button type="primary" icon="el-icon-search" size="small" @click="searchPatient">查询</el-button> -->
@@ -38,18 +38,17 @@
 import Header from '@/components/common/Header'
 import {apiEnterSearch} from '@/api/api-common'
 
+
 export default {
     name:"Search",
     components:{Header},
     data () {
         return {
             form:{},
-            wenxian: "",
-            collapsed: true,
-            wenxian:'',
-            mingci:'',
-            fangji:'',
-            yaocai:''
+            literature:'',
+            term:'',
+            prescription:'',
+            tcm:''
         }
     },
     methods: {
@@ -64,7 +63,10 @@ export default {
             })
             .catch(() => {});
         },
-
+        search (key,value) {
+          // alert("hello:"+key + ":"+value)
+          this.$router.push("/term?class=" + key + "&search=" + value);
+        }
     },
     created () {
       apiEnterSearch().then(res => {
@@ -75,9 +77,7 @@ export default {
               // alert('请先登录')
               this.$router.push("/login")
           }
-      }
-
-      )
+      })
     }
 }
 </script>

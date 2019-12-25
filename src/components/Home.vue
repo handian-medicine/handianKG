@@ -51,9 +51,6 @@ export default {
             })
             .catch(() => {});
         },
-        collapse: function() {
-          this.collapsed = !this.collapsed;
-        },
 
     },
     mounted () {
@@ -85,7 +82,8 @@ export default {
   }
 
   .image {
-    width: 100%;
+    width: 195px;
+    height: 145px;
     display: block;
   }
 

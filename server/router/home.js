@@ -54,7 +54,7 @@ router.post('/product_list', function (req, res, next) {
 router.post('/product_graph', function (req, res, next) {
     if (req.cookies.usertoken != undefined) {
         options = {
-            url:myConst.apiurl + "/product/" + req.body.id, //+ "/relationships/",
+            url:myConst.apiurl + "/product/" + req.body.id + "/" + req.body.page, //+ "/relationships/",
             form:{
             },
             // headers: {'Authorization': 'Bearer ' + token}
@@ -118,6 +118,9 @@ router.post('/term_content', function (req, res, next) {
 
     })
 })
+
+// 搜索
+// 进入搜索页面
 router.post('/enter_search', function (req, res, next) {
     if (req.cookies.usertoken != undefined) {
         res.send({msg:'ok'})
@@ -125,4 +128,64 @@ router.post('/enter_search', function (req, res, next) {
         res.send({msg:'请先登录'})
     }
 })
+// literature搜索
+router.post('/literature_search', function (req, res, next) {
+    options = {
+        url:myConst.apiurl + "/search/literature/" + encodeURI(req.body.search)  + "/",
+        form:{},
+        // headers: {'Authorization': 'Bearer ' + token}
+        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    }
+    console.log("搜索literature_search:",options)
+    request.get(options, function (error, response, body) {
+        var data = JSON.parse(body)
+        res.send({msg:'ok',data:data})
+
+    })
+})
+// Prescription搜索
+router.post('/prescription_search', function (req, res, next) {
+    options = {
+        url:myConst.apiurl + "/search/prescription/" + encodeURI(req.body.search)  + "/",
+        form:{},
+        // headers: {'Authorization': 'Bearer ' + token}
+        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    }
+    console.log("搜索prescription_search:",options)
+    request.get(options, function (error, response, body) {
+        var data = JSON.parse(body)
+        res.send({msg:'ok',data:data})
+
+    })
+})
+// Tcm搜索
+router.post('/tcm_search', function (req, res, next) {
+    options = {
+        url:myConst.apiurl + "/search/tcm/" + encodeURI(req.body.search)  + "/",
+        form:{},
+        // headers: {'Authorization': 'Bearer ' + token}
+        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    }
+    console.log("搜索tcm_search:",options)
+    request.get(options, function (error, response, body) {
+        var data = JSON.parse(body)
+        res.send({msg:'ok',data:data})
+
+    })
+})
+// Term搜索
+router.post('/term_search', function (req, res, next) {
+    options = {
+        url:myConst.apiurl + "/search/term/" + encodeURI(req.body.search)  + "/",
+        // headers: {'Authorization': 'Bearer ' + token}
+        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    }
+    console.log("搜索term_search:",options)
+    request.get(options, function (error, response, body) {
+        var data = JSON.parse(body)
+        res.send({msg:'ok',data:data})
+    })
+
+})
+
 module.exports = router

@@ -60,9 +60,6 @@ name:"Literature",
             })
             .catch(() => {});
         },
-        collapse: function() {
-          this.collapsed = !this.collapsed;
-        },
 
     },
     created() {

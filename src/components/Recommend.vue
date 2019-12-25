@@ -9,7 +9,8 @@
   </el-row>
   <el-row :gutter="1">
     <el-col :span="15">
-        <div id="main" style="width:100%; height:400px;"></div>
+        <div id="main" style="width:100%; height:600px;"></div>
+        <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
     </el-col>
     <el-col :span="8">
       相关文献
@@ -40,7 +41,7 @@ export default {
             wenxian: "",
             collapsed: true,
             literature:{},
-            // literature_url:[],
+            num:1
         }
     },
     methods: {
@@ -55,11 +56,15 @@ export default {
             })
             .catch(() => {});
         },
-        collapse: function() {
-          this.collapsed = !this.collapsed;
+        handleChange(value) {
+          console.log(value);
+          this.drawCharts(value)
         },
-        drawCharts () {
-          var params = {id:this.$route.query.id}
+        drawCharts (page_num) {
+          var params = {
+            id:this.$route.query.id,
+            page:page_num
+            }
           apiProductGraph(params).then(res=>{
             if (res.data != undefined) {
               var data = []
@@ -105,13 +110,20 @@ export default {
               this.chartGraph.setOption(
                 {
                   // 图的标题
-                  title: {text: 'ECharts 关系图'},
+                  title: {
+                            text: 'ECharts 关系图',
+                            top: "top",
+                            left: "left",
+                            textStyle: {
+                                // color: '#f7f7f7'
+                            }
+                  },
                   // 提示框的配置
                   tooltip: {
                     formatter: function (x) {return x.data.des;}
                   },
                   // animationEasingUpdate: false,
-                  animationDurationUpdate: 0,
+                  animationDuration: 1000,
                   animationEasingUpdate: 'quinticInOut',
                   // 工具箱
                   toolbox: {
@@ -143,21 +155,25 @@ export default {
                     {
                       type: 'graph', // 类型:关系图
                       layout: 'force', //图的布局，类型为力导图
-                      symbolSize: 40, // 调整节点的大小
+                      symbolSize: 20, // 调整节点的大小
                       roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启
                       force: {
-                          repulsion: 2500,
-                          edgeLength: [10, 50]
+                          repulsion: 60,
+                          gravity: 0.1,
+                          layoutAnimation: true,
+                          edgeLength: [10, 20]
                       },
                       draggable: true,
                       lineStyle: { // edge的线样式
                           normal: {
-                              width: 2,
+                              opacity: 0.9,
+                              width: 1.5,
+                              curveness: 0,
                               color: '#4b565b',
                           }
                       },
-                      edgeSymbol: ['circle', 'arrow'],
-                      edgeSymbolSize: [2, 10],
+                      // edgeSymbol: ['circle', 'arrow'],
+                      // edgeSymbolSize: [2, 10],
                       edgeLabel: { //edge标签样式
                           normal: {
                               textStyle: {
@@ -170,27 +186,15 @@ export default {
                       categories:categories,
                       label: { //node标签样式
                           normal: {
+                              position: 'inside',
+                              // formatter: '{b}',
+                              fontSize: 13,
+                              fontStyle: '600',
                               show: true,
                               textStyle: {},
                               formatter: function (x) {return x.data.name;}
                           },
                       },
-                      // 数据
-                      // data: [
-                      //   {
-                      //     id:0,
-                      //     name: 'node01',
-                      //     des: 'nodedes01',
-                      //     symbolSize: 50,
-                      //   }
-                      // ],
-                      // links: [
-                      //   {
-                      //     source: '0',
-                      //     target: '1',
-                      //     aa: 'link01',
-                      //     des: 'link01des'
-                      //   },
                       data: data,
                       links: links,
                     }
@@ -204,7 +208,7 @@ export default {
         }// drawCharts
     },
     mounted: function () {
-      this.drawCharts()
+      this.drawCharts(1)
     },
     // updated: function () {
     //   this.drawCharts()

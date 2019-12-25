@@ -26,8 +26,12 @@ export const apiProductGraph = params => { return axios.post(`${baseUrl}/home/pr
 export const apiProductLiterature = params => { return axios.post(`${baseUrl}/home/product_literature`, params).then(res => res.data) }
 //文献详细页面
 export const apiLiteratureContent = params => { return axios.post(`${baseUrl}/home/literature_content`, params).then(res => res.data) }
+
 //术语页面
 export const apiTermContent = params => { return axios.post(`${baseUrl}/home/term_content`, params).then(res => res.data) }
-
 //搜索页面
 export const apiEnterSearch = params => { return axios.post(`${baseUrl}/home/enter_search`, params).then(res => res.data) }
+export const apiLiteratureSearch = params => { return axios.post(`${baseUrl}/home/literature_search`, params).then(res => res.data) }
+export const apiPrescriptionSearch = params => { return axios.post(`${baseUrl}/home/prescription_search`, params).then(res => res.data) }
+export const apiTcmSearch = params => { return axios.post(`${baseUrl}/home/tcm_search`, params).then(res => res.data) }
+export const apiTermSearch = params => { return axios.post(`${baseUrl}/home/term_search`, params).then(res => res.data) }

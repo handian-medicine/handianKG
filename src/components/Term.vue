@@ -9,7 +9,7 @@
   <el-row :gutter="20">
     <el-col :span="16">
       <div class="grid-content bg-purple">
-        名词
+        <h3>{{this.$route.query.search}}</h3>
         <ul>
           <li>属性1</li>
           <li>属性2</li>
@@ -36,16 +36,20 @@
 </template>
 
 <script>
-import {apiHome} from '@/api/api-common'
+import Header from '@/components/common/Header'
 import {apiTermContent} from '@/api/api-common';
 
+import {apiLiteratureSearch} from '@/api/api-common'
+import {apiPrescriptionSearch} from '@/api/api-common'
+import {apiTcmSearch} from '@/api/api-common'
+import {apiTermSearch} from '@/api/api-common'
 export default {
     name:"Term",
     components:{Header},
     data () {
         return {
             userinfo:{},
-            wenxian: "",
+            term: "",
             collapsed: true,
         }
     },
@@ -61,11 +65,20 @@ export default {
             })
             .catch(() => {});
         },
-        collapse: function() {
-          this.collapsed = !this.collapsed;
-        }
     },
     created () {
+      var search_func = {
+            "literature":apiLiteratureSearch,
+            "prescription":apiPrescriptionSearch,
+            "tcm":apiTcmSearch,
+            "term":apiTermSearch,
+      }
+      var params = {search:this.$route.query.search}
+      console.log(search_func,params)
+      search_func[this.$route.query.class](params).then(res => {
+            console.log('搜索',res.data.data)
+            this.term = res.data.data
+      })
     }
 }
 </script>
