@@ -60,13 +60,11 @@ export default {
             type: "warning"
           })
             .then(() => {
-              _this.$router.push("/login");
+              _this.$router.push("/home");
             })
             .catch(() => {});
         },
-        collapse: function() {
-          this.collapsed = !this.collapsed;
-        }
+
     },
     created () {
       apiEnterSearch().then(res => {

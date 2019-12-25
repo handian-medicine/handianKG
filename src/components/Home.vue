@@ -11,7 +11,7 @@
   <el-row>
     <el-col :span="5" v-for="(val, index) in product_list" :key="index" :offset="1">
       <el-card :body-style="{ padding: '0px' }">
-        <img src="@/assets/bg1.jpg" class="image">
+        <img :src="'http://'+val.pic_url" class="image">
         <div style="padding: 14px;">
           <el-link :href='"/recommend?id=" + val.neo_id' :underline="false">{{val.name}}</el-link>
         </div>

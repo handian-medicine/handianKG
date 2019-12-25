@@ -61,36 +61,54 @@ export default {
         drawCharts () {
           var params = {id:this.$route.query.id}
           apiProductGraph(params).then(res=>{
+            if (res.data != undefined) {
               var data = []
               var links = []
               data = res.data.data
-              data[0].category = 0
-              var categories = [
-                          {
-                            name: '小柴胡汤',
-                            // icon: 'rect' //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
-                          },
-                          {
-                            name: 'type2',
-                          }
-              ],
               links = res.data.links
               // 类似python里的map函数
               var links = links.map(o=>{
                   return {source:String(o.start),target:String(o.end),rel:String(o.rel)}
                 });
-              console.log("看这里links",links)
-              console.log("看这里data",data)
+              var data = data.map(o=>{
+                  // 这里要把api传过来的category的值映射到整数域上
+                  var cat2num = {
+                          "Term":0,
+                          "Guijing":1,
+                          "HandianProduct":2,
+                          "Literature":3,
+                          "Prescription":4,
+                          "TCM":5,
+                          "Xingwei":6,
+                          "Author":7,
+                      }
+                  return {
+                    id:String(o.id),
+                    name:String(o.name),
+                    category:cat2num[o.label],
+                    draggable: "true"}
+                });
+              var categories = [
+                      {name: 'Term'},
+                      {name: 'Guijing'},
+                      {name: 'HandianProduct'},
+                      {name: 'Literature'},
+                      {name: 'Prescription'},
+                      {name: 'TCM'},
+                      {name: 'Xingwei'},
+                      {name: 'Author'},
+                ]
+              // icon: 'rect' //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+              // console.log("看这里links", links)
+              console.log("看这里data", data)
               this.chartGraph = echarts.init(document.getElementById('main'))
               this.chartGraph.setOption(
                 {
                   // 图的标题
-                  title: {
-                      text: 'ECharts 关系图'
-                  },
+                  title: {text: 'ECharts 关系图'},
                   // 提示框的配置
                   tooltip: {
-                      formatter: function (x) {return x.data.des;}
+                    formatter: function (x) {return x.data.des;}
                   },
                   // animationEasingUpdate: false,
                   animationDurationUpdate: 0,
@@ -107,12 +125,20 @@ export default {
                           saveAsImage: {show: true}
                       }
                   },
-                  legend: [{
+                  legend:{
                         // selectedMode: 'single',
                         data: categories.map(function (a) {
                             return a.name;
-                        })
-                  }],
+                        }),
+                        icon: 'circle',
+                        type: 'scroll',
+                        orient: 'vertical',
+                        left: 10,
+                        top: 20,
+                        bottom: 20,
+                        itemWidth: 10,
+                        itemHeight: 10
+                  },
                   series:[
                     {
                       type: 'graph', // 类型:关系图
@@ -171,6 +197,9 @@ export default {
                   ]
                 }
               ) //setOption
+            } else {
+              console.log('请先登录')
+            }
           }).catch();//apiProductGraph
         }// drawCharts
     },
@@ -191,7 +220,6 @@ export default {
               this.literature = res.data
               console.log('hello',this.literature)
           } else {
-              // alert('请先登录')
               this.$router.push("/login")
           }
       }).catch()

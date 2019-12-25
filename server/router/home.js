@@ -52,19 +52,22 @@ router.post('/product_list', function (req, res, next) {
     })
 })
 router.post('/product_graph', function (req, res, next) {
-    options = {
-        url:myConst.apiurl + "/product/" + req.body.id, //+ "/relationships/",
-        form:{
-        },
-        // headers: {'Authorization': 'Bearer ' + token}
-        headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+    if (req.cookies.usertoken != undefined) {
+        options = {
+            url:myConst.apiurl + "/product/" + req.body.id, //+ "/relationships/",
+            form:{
+            },
+            // headers: {'Authorization': 'Bearer ' + token}
+            headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
+        }
+        request.get(options, function (error, response, body) {
+            var product_graph = JSON.parse(body)
+            console.log("home.js product_graph:",product_graph)
+            res.send({msg:'ok',data:product_graph})
+        })
+    } else {
+        res.send({msg:'请先登录'})
     }
-    request.get(options, function (error, response, body) {
-        var product_graph = JSON.parse(body)
-        console.log("home.js product_graph:",product_graph)
-        res.send({msg:'ok',data:product_graph})
-
-    })
 })
 router.post('/product_literature', function (req, res, next) {
     if (req.cookies.usertoken != undefined) {
