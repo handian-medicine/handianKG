@@ -19,13 +19,15 @@
       </div>
     </el-col>
     <el-col :span="8">
-      <div class="grid-content bg-purple">
-        相关名词
-        <ul>
-          <li>名词1</li>
-          <li>名词2</li>
-          <li>名词3</li>
+      <div>
+        相关文献
+        <ul v-if="literatures!=''">
+          <li>{{literatures[0].name}}</li>
+          <li>{{literatures[1].name}}</li>
+          <li>{{literatures[2].name}}</li>
+          <li>{{literatures[3].name}}</li>
         </ul>
+        <ul v-else></ul>
       </div>
     </el-col>
     <!-- <el-col :span="6"><div class="grid-content bg-purple"></div></el-col> -->
@@ -50,6 +52,7 @@ export default {
         return {
             userinfo:{},
             term: "",
+            literatures:[],
             collapsed: true,
         }
     },
@@ -76,8 +79,13 @@ export default {
       var params = {search:this.$route.query.search}
       console.log(search_func,params)
       search_func[this.$route.query.class](params).then(res => {
-            console.log('搜索',res.data.data)
-            this.term = res.data.data
+            console.log('搜索',res.data)
+            if (res.data.data != undefined) {
+              this.term = res.data.data
+              this.literatures = []
+            } else {
+              this.literatures = res.data
+            }
       })
     }
 }
@@ -151,22 +159,6 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
-  }
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
   }
 
   .image {

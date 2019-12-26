@@ -132,26 +132,26 @@ router.post('/enter_search', function (req, res, next) {
 router.post('/literature_search', function (req, res, next) {
     options = {
         url:myConst.apiurl + "/search/literature/" + encodeURI(req.body.search)  + "/",
-        form:{},
+        // form:{},
         // headers: {'Authorization': 'Bearer ' + token}
         headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
     }
     console.log("搜索literature_search:",options)
     request.get(options, function (error, response, body) {
         var data = JSON.parse(body)
+        console.log("这是咋回事",data)
         res.send({msg:'ok',data:data})
-
     })
 })
 // Prescription搜索
 router.post('/prescription_search', function (req, res, next) {
     options = {
         url:myConst.apiurl + "/search/prescription/" + encodeURI(req.body.search)  + "/",
-        form:{},
+        // form:{},
         // headers: {'Authorization': 'Bearer ' + token}
         headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
     }
-    console.log("搜索prescription_search:",options)
+    console.log("搜索prescription_search:", options)
     request.get(options, function (error, response, body) {
         var data = JSON.parse(body)
         res.send({msg:'ok',data:data})
@@ -162,7 +162,7 @@ router.post('/prescription_search', function (req, res, next) {
 router.post('/tcm_search', function (req, res, next) {
     options = {
         url:myConst.apiurl + "/search/tcm/" + encodeURI(req.body.search)  + "/",
-        form:{},
+        // form:{},
         // headers: {'Authorization': 'Bearer ' + token}
         headers: {'Authorization': 'Bearer ' + req.cookies.usertoken.access_token}
     }
@@ -183,6 +183,7 @@ router.post('/term_search', function (req, res, next) {
     console.log("搜索term_search:",options)
     request.get(options, function (error, response, body) {
         var data = JSON.parse(body)
+        // console.log(body)
         res.send({msg:'ok',data:data})
     })
 

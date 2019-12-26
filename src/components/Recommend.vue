@@ -154,6 +154,7 @@ export default {
                   series:[
                     {
                       type: 'graph', // 类型:关系图
+                      // layout: 'none', //图的布局，类型为力导图
                       layout: 'force', //图的布局，类型为力导图
                       symbolSize: 20, // 调整节点的大小
                       roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启

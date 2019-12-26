@@ -8,22 +8,22 @@
   <el-row justify="center">
     <el-form ref="form" :model="form" label-width="180px">
       <el-form-item label="汉典药品文献检索" >
-        <el-input v-model="literature">
+        <el-input v-model="literature" @keyup.enter.native="search('literature',literature)">
           <el-button slot="append" icon="el-icon-search" @click="search('literature',literature)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="医学名词检索" >
-        <el-input v-model="term">
+        <el-input v-model="term" @keyup.enter.native="search('term',term)">
           <el-button slot="append" icon="el-icon-search" @click="search('term',term)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="中医方剂检索" >
-        <el-input v-model="prescription">
+        <el-input v-model="prescription" @keyup.enter.native="search('prescription',prescription)">
           <el-button slot="append" icon="el-icon-search" @click="search('prescription',prescription)"></el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="中药材检索" >
-        <el-input v-model="tcm">
+        <el-input v-model="tcm" @keyup.enter.native="search('tcm',tcm)">
           <el-button slot="append" icon="el-icon-search" @click="search('tcm',tcm)"></el-button>
         </el-input>
       </el-form-item>
