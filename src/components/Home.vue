@@ -18,7 +18,14 @@
       </el-card>
     </el-col>
   </el-row>
-
+  <el-row>
+    <h3 style="text-align: center;">
+      <el-button type="primary" icon="el-icon-search" @click='$router.push("/search")'>更多搜索</el-button>
+    </h3>
+  </el-row>
+  <div class="pic-bottom">
+    <img src="../assets/shezhenpic.jpg" style="height:100px;width:100px">
+  </div>
 
   </el-row>
 
@@ -34,6 +41,7 @@ export default {
     components:{Header},
     data () {
         return {
+            userinfo:{},
             wenxian: "",
             collapsed: true,
             product_list:null,
@@ -61,6 +69,9 @@ export default {
             this.product_list = res.data
             console.log('产品列表',this.product_list)
             }).catch()
+    },
+    created () {
+      this.userinfo = JSON.parse((sessionStorage.getItem("userinfo")))
     }
 }
 </script>
@@ -86,5 +97,11 @@ export default {
     height: 145px;
     display: block;
   }
-
+.pic-bottom {
+    width:100px;
+    float:right;
+    position:fixed;
+    right:0px;
+    bottom:0px;
+}
 </style>

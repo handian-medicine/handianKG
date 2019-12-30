@@ -76,6 +76,8 @@ export default {
               //     sessionStorage.setItem('userinfo', JSON.stringify(home_res.data.userinfo))
               //     this.$router.push({ path: '/home' })
               //   }).catch()
+              // console.log(res.user)
+              sessionStorage.setItem('userinfo', JSON.stringify(res.user.email))
               this.$router.push({ path: '/home' })
             }
           })
