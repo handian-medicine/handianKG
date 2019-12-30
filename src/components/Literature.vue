@@ -20,11 +20,8 @@
     </el-col>
     <el-col :span="8">
       <h3>相关文献</h3>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
+      <ul v-for="item in literature" :key="item.name">
+        <li><el-link :href='"/literature?url=" + item.url + "&name=" + item.name + "&id=" + $route.query.id' :underline="false">{{item.name}}</el-link></li>
       </ul>
     </el-col>
   </el-row>
@@ -37,6 +34,8 @@
 import pdf from 'vue-pdf'
 import Header from '@/components/common/Header'
 import {apiLiteratureContent} from '@/api/api-common';
+import {apiProductLiterature} from '@/api/api-common';
+
 export default {
 name:"Literature",
     components:{pdf,Header},
@@ -45,7 +44,8 @@ name:"Literature",
             userinfo:{},
             wenxian: "",
             collapsed: true,
-            literature_content:''
+            literature_content:'',
+            literature:{}
         }
     },
     methods: {
@@ -63,15 +63,22 @@ name:"Literature",
 
     },
     created() {
-      // var params = {url:this.$route.query.url}
-      // this.literature_url = this.$route.query.url
-      // this.literature_name = this.$route.query.name
+
       var params = {url:this.$route.query.url}
-      console.log(params)
       apiLiteratureContent(params).then(res=>{
           this.literature_content = res.data
           console.log('hello',this.literature_content)
       }).catch()
+
+      var params2 = {id:this.$route.query.id}
+      apiProductLiterature(params2).then(res=>{
+          if (res.msg == 'ok') {
+              this.literature = res.data
+              console.log('走到这里',this.literature)
+          } else {
+              this.$router.push("/login")
+          }
+        }).catch()
     },
 }
 </script>

@@ -16,7 +16,7 @@
       相关文献
       <ul v-for="item in literature" :key="item.name">
         <!-- <li><el-link href="/literature" :underline="false">{{item.name}}</el-link></li> -->
-        <li><el-link :href='"/literature?url=" + item.url + "&name=" + item.name' :underline="false">{{item.name}}</el-link></li>
+        <li><el-link :href='"/literature?url=" + item.url + "&name=" + item.name + "&id=" + id' :underline="false">{{item.name}}</el-link></li>
         <!-- <li><el-link :href="item.url" :underline="false">{{item.name}}</el-link></li> -->
       </ul>
     </el-col>
@@ -37,11 +37,12 @@ export default {
     components:{Header},
     data () {
         return {
-            // userinfo:{},
-            wenxian: "",
-            collapsed: true,
             literature:{},
-            num:1
+            num:1,
+            data:[],
+            links:[],
+            categories:[],
+            id:''
         }
     },
     methods: {
@@ -66,80 +67,52 @@ export default {
             page:page_num
             }
           apiProductGraph(params).then(res=>{
-            if (res.data != undefined) {
-              var data = []
-              var links = []
-              data = res.data.data
-              links = res.data.links
+            if (res.data != undefined) { //
+              this.data = res.data.data
+              this.links = res.data.links
               // 类似python里的map函数
-              var links = links.map(o=>{
+              this.links = this.links.map(o=>{
                   return {source:String(o.start),target:String(o.end),rel:String(o.rel)}
                 });
-              var data = data.map(o=>{
-                  // 这里要把api传过来的category的值映射到整数域上
-                  var cat2num = {
-                          "Term":0,
-                          "Guijing":1,
-                          "HandianProduct":2,
-                          "Literature":3,
-                          "Prescription":4,
-                          "TCM":5,
-                          "Xingwei":6,
-                          "Author":7,
-                      }
+              var en2cn = {
+                  'HandianProduct': '汉典产品',
+                  'Literature': '文献',
+                  'Prescription': '药方',
+                  'Term': '医学名词',
+                  'Guijing': '归经',
+                  'TCM': '中药名',
+                  'Xingwei': '性味',
+                  'Author': '作者',
+              }
+              this.data = this.data.map(o=>{
+                  //获取所有的类别,并转换为中文
+                  if (JSON.stringify(this.categories).indexOf(JSON.stringify(en2cn[o.label]))==-1){
+                      this.categories.push({name:en2cn[o.label]})
+                  }
                   return {
                     id:String(o.id),
                     name:String(o.name),
-                    category:cat2num[o.label],
+                    category:en2cn[o.label],
+                    symbolSize:30,
                     draggable: "true"}
-                });
-              var categories = [
-                      {name: 'Term'},
-                      {name: 'Guijing'},
-                      {name: 'HandianProduct'},
-                      {name: 'Literature'},
-                      {name: 'Prescription'},
-                      {name: 'TCM'},
-                      {name: 'Xingwei'},
-                      {name: 'Author'},
-                ]
-              // icon: 'rect' //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
-              // console.log("看这里links", links)
-              console.log("看这里data", data)
+              });
+              console.log("看这里links", this.links)
+              console.log("看这里data", this.data)
+              console.log("看这里categories",this.categories)
               this.chartGraph = echarts.init(document.getElementById('main'))
-              this.chartGraph.setOption(
-                {
-                  // 图的标题
+              this.chartGraph.setOption({
                   title: {
-                            text: 'ECharts 关系图',
+                            text: '中医知识图谱',
                             top: "top",
                             left: "left",
                             textStyle: {
                                 // color: '#f7f7f7'
                             }
                   },
-                  // 提示框的配置
-                  tooltip: {
-                    formatter: function (x) {return x.data.des;}
-                  },
-                  // animationEasingUpdate: false,
-                  animationDuration: 1000,
-                  animationEasingUpdate: 'quinticInOut',
-                  // 工具箱
-                  toolbox: {
-                      // 显示工具箱
-                      show: true,
-                      feature: {
-                          mark: {show: true},
-                          // 还原
-                          restore: {show: true},
-                          // 保存为图片
-                          saveAsImage: {show: true}
-                      }
-                  },
+                  tooltip: {},
                   legend:{
                         // selectedMode: 'single',
-                        data: categories.map(function (a) {
+                        data: this.categories.map(function (a) {
                             return a.name;
                         }),
                         icon: 'circle',
@@ -151,57 +124,38 @@ export default {
                         itemWidth: 10,
                         itemHeight: 10
                   },
-                  series:[
-                    {
-                      type: 'graph', // 类型:关系图
-                      // layout: 'none', //图的布局，类型为力导图
-                      layout: 'force', //图的布局，类型为力导图
-                      symbolSize: 20, // 调整节点的大小
-                      roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启
-                      force: {
-                          repulsion: 60,
-                          gravity: 0.1,
-                          layoutAnimation: true,
-                          edgeLength: [10, 20]
-                      },
-                      draggable: true,
-                      lineStyle: { // edge的线样式
-                          normal: {
-                              opacity: 0.9,
-                              width: 1.5,
-                              curveness: 0,
-                              color: '#4b565b',
-                          }
-                      },
-                      // edgeSymbol: ['circle', 'arrow'],
-                      // edgeSymbolSize: [2, 10],
-                      edgeLabel: { //edge标签样式
-                          normal: {
-                              textStyle: {
-                                  fontSize: 10
-                              },
-                              show: true,
-                              formatter: function (x) {return x.data.rel;}
-                          }
-                      },
-                      categories:categories,
-                      label: { //node标签样式
-                          normal: {
-                              position: 'inside',
-                              // formatter: '{b}',
-                              fontSize: 13,
-                              fontStyle: '600',
-                              show: true,
-                              textStyle: {},
-                              formatter: function (x) {return x.data.name;}
+                  animation: false,
+                  series : [
+                      {
+                          name: '知识图谱',
+                          type: 'graph',
+                          layout: 'force',
+                          data: this.data,
+                          links: this.links,
+                          categories: this.categories,
+                          roam: true,
+                          label: {
+                              normal: {
+                                  position: 'right',
+                                  show: true,
+                                  formatter: function (x) {return x.data.name;}
+                              }
                           },
-                      },
-                      data: data,
-                      links: links,
-                    }
+                          force: {
+                              edgeLength:[90,200], // 调节节点中间的连线长度
+                              repulsion: 200
+                          }
+                      }
                   ]
-                }
-              ) //setOption
+              }) //setOption
+              this.chartGraph.on('click',{dataType: 'node'},function (params){
+                // id: (...)
+                // name: (...)
+                // category: (...)
+                // symbolSize: (...)
+                // draggable: (...)
+                  console.log('点击目标:'+ params.data.category)
+              })
             } else {
               console.log('请先登录')
             }
@@ -215,12 +169,10 @@ export default {
     //   this.drawCharts()
     // },
     created () {
-      var params = {id:this.$route.query.id}
+      this.id = this.$route.query.id
+      var params = {id:this.id}
       console.log(params)
       apiProductLiterature(params).then(res=>{
-          // for (var i = 0;i < res.data.length;i++){
-          //     this.literature[i] = res.data[i].name
-          // }
           if (res.msg == 'ok') {
               this.literature = res.data
               console.log('hello',this.literature)

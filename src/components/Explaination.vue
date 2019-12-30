@@ -7,7 +7,7 @@
   <br>
 
   <el-row :gutter="20">
-    <el-col :span="16">
+    <el-col :span="14" style="padding-left:20px">
       <div class="grid-content bg-purple">
         <h3>{{this.$route.query.search}}</h3>
         <ul>
@@ -18,9 +18,9 @@
         <img src="@/assets/bg1.jpg" class="image">
       </div>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="9">
       <div>
-        相关文献
+        <h3>相关文献</h3>
         <ul v-if="literatures!=''">
           <li>{{literatures[0].name}}</li>
           <li>{{literatures[1].name}}</li>
@@ -46,14 +46,12 @@ import {apiPrescriptionSearch} from '@/api/api-common'
 import {apiTcmSearch} from '@/api/api-common'
 import {apiTermSearch} from '@/api/api-common'
 export default {
-    name:"Term",
+    name:"Explaination",
     components:{Header},
     data () {
         return {
-            userinfo:{},
-            term: "",
+            explaination: "",
             literatures:[],
-            collapsed: true,
         }
     },
     methods: {
@@ -77,16 +75,17 @@ export default {
             "term":apiTermSearch,
       }
       var params = {search:this.$route.query.search}
-      console.log(search_func,params)
-      search_func[this.$route.query.class](params).then(res => {
-            console.log('搜索',res.data)
-            if (res.data.data != undefined) {
-              this.term = res.data.data
-              this.literatures = []
-            } else {
-              this.literatures = res.data
-            }
-      })
+      console.log("搜索项目：",params)
+      if (this.$route.query.class == 'literature') {
+        apiLiteratureSearch(params).then(res => {
+          this.literatures = res.data
+        })
+      } else {
+        search_func[this.$route.query.class](params).then(res => {
+          this.explaination = res.data.data
+          this.literatures = []
+        })
+      }
     }
 }
 </script>

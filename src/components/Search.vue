@@ -65,7 +65,7 @@ export default {
         },
         search (key,value) {
           // alert("hello:"+key + ":"+value)
-          this.$router.push("/term?class=" + key + "&search=" + value);
+          this.$router.push("/explaination?class=" + key + "&search=" + value);
         }
     },
     created () {

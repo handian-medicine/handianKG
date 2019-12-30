@@ -60,8 +60,8 @@ export default new Router({
       hidden: true
     },
     {
-      path: '/term',
-      component: () => import('@/components/Term.vue'),
+      path: '/explaination',
+      component: () => import('@/components/Explaination.vue'),
       name: '',
       hidden: true
     },
